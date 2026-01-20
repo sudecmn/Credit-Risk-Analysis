@@ -40,6 +40,9 @@ Kredi risk yönetimi, finans kuruluşlarının karlılığını doğrudan etkile
 * `/data`: Ham veri seti (german_credit_data.csv).
 * `/notebooks`: Analiz ve model eğitim süreçlerini içeren Jupyter Notebook dosyası.
 * `requirements.txt`: Projenin çalışması için gerekli Python kütüphaneleri.
+* `app.py`: Kullanıcıların canlı kredi risk analizi yapabildiği interaktif web uygulaması (Streamlit).
+* `model.pkl`: Eğitilmiş ve kullanıma hazır olan Random Forest makine öğrenmesi modeli dosyası.   
+
 
 ---
 ## 🛠️ Kurulum ve Çalıştırma
