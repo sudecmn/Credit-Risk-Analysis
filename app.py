@@ -1,50 +1,61 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 
-# Başlık ve Arayüz Ayarları
-st.set_page_config(page_title="Kredi Risk Tahmini", layout="centered")
-st.title("Kredi Risk Analiz Sistemi")
+# 1. Sayfa Ayarları
+st.set_page_config(page_title="Fintech: Kredi Risk Analiz", layout="centered")
 
-# Modeli Yükleme Fonksiyonu
+
+# 2. Model Yükleme
 @st.cache_resource
 def load_model():
-    return joblib.load('model.pkl')
+    if os.path.exists('model.pkl'):
+        return joblib.load('model.pkl')
+    return None
 
-try:
-    model = load_model()
-    
-    # Giriş Alanları
-    st.subheader("Müşteri Bilgileri")
-    col1, col2 = st.columns(2)
+model = load_model()
 
-    with col1:
-        age = st.number_input("Yaş", 18, 100, 30)
-        amount = st.number_input("Kredi Miktarı (Euro)", 100, 20000, 5000)
-        duration = st.slider("Vade (Ay)", 4, 72, 24)
+# 3. Ana Başlık
+st.title(" Fintech: Kredi Risk Analiz Sistemi")
 
-    with col2:
-        sex = st.selectbox("Cinsiyet", ["Erkek", "Kadın"])
-        housing = st.selectbox("Konut", ["Kira", "Mülk", "Ücretsiz"])
+# 4. Giriş Alanları (Analiz dosyasındaki sırayla eşleşecek şekilde)
+col1, col2 = st.columns(2)
 
-    # Tahmin Butonu
-    if st.button("Risk Analizi Yap"):
-        # Verileri sayısallaştırma (Encoding)
+with col1:
+    age = st.number_input("Yaş", 18, 100, 35)
+    sex = st.selectbox("Cinsiyet", ["Erkek", "Kadın"])
+    housing = st.selectbox("Konut Durumu", ["Mülk", "Kira", "Ücretsiz"])
+    amount = st.number_input("Kredi Miktarı (Euro)", 100, 20000, 1000)
+
+with col2:
+    duration = st.slider("Vade (Ay)", 4, 72, 12)
+    # Sabit tutulan teknik değerler (Analizdeki 'yeni_musteri' örneğinden)
+    st.caption("Not: Diğer finansal parametreler varsayılan değerlerde tutulmuştur.")
+
+# 5. Hesaplama
+if st.button("Risk Analizi Yap"):
+    if model is not None:
+        # --- ANALİZ DOSYASIYLA %100 UYUMLU MAPPING ---
         sex_val = 1 if sex == "Erkek" else 0
-        housing_val = 0 if housing == "Kira" else (1 if housing == "Mülk" else 2)
+        # Housing: own:1, rent:2, free:0
+        housing_val = 1 if housing == "Mülk" else (2 if housing == "Kira" else 0)
         
-        # Giriş verisi (9 sütun: Age, Sex, Job, Housing, Saving, Checking, Purpose, Amount, Duration)
-        # Diğer değerleri (Job, Saving vb.) varsayılan orta değerlerde tutuyoruz
-        data = [[age, sex_val, 2, housing_val, 0, 0, 1, amount, duration]]
+        # Sütun Sırası: [Age, Sex, Job, Housing, Saving, Checking, Credit amount, Duration, Purpose]
+        # Sabitler: Job=2, Saving=0, Checking=0, Purpose=1
+        features = [[age, sex_val, 2, housing_val, 0, 0, amount, duration, 1]]
         
-        prediction = model.predict(data)
-        prob = model.predict_proba(data)
-
+        prediction = model.predict(features)
+        proba = model.predict_proba(features)
+        
+        st.markdown("---")
+        # Analiz: 1=GÜVENLİ, 0=RİSKLİ
         if prediction[0] == 1:
-            st.success(f" GÜVENLİ: Kredi Onaylanabilir! (Olasılık: %{prob[0][1]*100:.1f})")
+            score = proba[0][1] * 100
+            st.success(f" GÜVENLİ: Kredi Onaylanabilir! (Güven: %{score:.1f})")
             st.balloons()
         else:
-            st.error(f" RİSKLİ: Başvuru Reddedilebilir! (Risk: %{prob[0][0]*100:.1f})")
-
-except Exception as e:
-    st.error(f"Model yüklenemedi: {e}")
+            score = proba[0][0] * 100
+            st.error(f" RİSKLİ: Başvuru Reddedilebilir! (Risk: %{score:.1f})")
+    else:
+        st.error("Model dosyası bulunamadı!")
