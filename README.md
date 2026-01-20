@@ -53,10 +53,15 @@ Projeyi yerel bilgisayarınızda çalıştırmak için şu adımları izleyin:
     ```
     ---
 2. **Gerekli Kütüphaneleri Yükleyin:**
+    ```bash
    python -m pip install -r requirements.txt
+    ```
    ---
-3. **Web Uygulamasını Başlatın:**
+    
+4. **Web Uygulamasını Başlatın:**
+    ```bash
    python -m streamlit run app.py
+    ```
    ---
    Not: Uygulama tarayıcınızda http://localhost:8501 adresinde otomatik olarak açılacaktır.
 
