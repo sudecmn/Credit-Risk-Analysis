@@ -66,6 +66,6 @@ Projeyi yerel bilgisayarınızda çalıştırmak için şu adımları izleyin:
    python -m streamlit run app.py
     ```
    ---
-   Not: Uygulama tarayıcınızda http://localhost:8501 adresinde otomatik olarak açılacaktır.
+   Not: Uygulama tarayıcınızda otomatik olarak açılacaktır.
 
    
