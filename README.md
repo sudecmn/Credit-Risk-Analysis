@@ -42,3 +42,27 @@ Kredi risk yönetimi, finans kuruluşlarının karlılığını doğrudan etkile
 * `requirements.txt`: Projenin çalışması için gerekli Python kütüphaneleri.
 
 ---
+## 🛠️ Kurulum ve Çalıştırma
+
+Projeyi yerel bilgisayarınızda çalıştırmak için şu adımları izleyin:
+
+1. **Depoyu Klonlayın:**
+   ```bash
+   git clone [https://github.com/sudecmn/Credit-Risk-Analysis.git](https://github.com/sudecmn/Credit-Risk-Analysis.git)
+   cd Credit-Risk-Analysis
+    ```
+    ---
+2. **Gerekli Kütüphaneleri Yükleyin:**
+    ```bash
+   python -m pip install -r requirements.txt
+    ```
+   ---
+    
+4. **Web Uygulamasını Başlatın:**
+    ```bash
+   python -m streamlit run app.py
+    ```
+   ---
+   Not: Uygulama tarayıcınızda http://localhost:8501 adresinde otomatik olarak açılacaktır.
+
+   
