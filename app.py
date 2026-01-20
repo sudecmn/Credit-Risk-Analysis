@@ -41,10 +41,10 @@ try:
         prob = model.predict_proba(data)
 
         if prediction[0] == 1:
-            st.success(f"✅ GÜVENLİ: Kredi Onaylanabilir! (Olasılık: %{prob[0][1]*100:.1f})")
+            st.success(f" GÜVENLİ: Kredi Onaylanabilir! (Olasılık: %{prob[0][1]*100:.1f})")
             st.balloons()
         else:
-            st.error(f"❌ RİSKLİ: Başvuru Reddedilebilir! (Risk: %{prob[0][0]*100:.1f})")
+            st.error(f" RİSKLİ: Başvuru Reddedilebilir! (Risk: %{prob[0][0]*100:.1f})")
 
 except Exception as e:
     st.error(f"Model yüklenemedi: {e}")
